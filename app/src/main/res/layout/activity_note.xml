@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/company_name_label"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/company_hint"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/time_label"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/note_date"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/place_label"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <CheckBox
+        android:id="@+id/note_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:text="@string/note_alarm_label"/>
+
+    </LinearLayout>
