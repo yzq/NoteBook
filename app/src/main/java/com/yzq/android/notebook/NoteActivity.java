@@ -32,10 +32,10 @@ import java.util.UUID;
 
 
 public class NoteActivity extends Activity {
+
     private Note mNote;
     private EditText mCompanyField;
     private EditText mPlaceField;
-    private View view;
     public static final String EXTRA_NOTE_ID = "com.yzq.android.notebook.note_id";
     private boolean exitflag;
     public static final String TAG = "NoteActivity";
@@ -44,19 +44,19 @@ public class NoteActivity extends Activity {
     private CheckBox mAlarmCheckBox;
     private AlarmManager alarmManager;
 
-    //TargetApi(11)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        //获取NoteListActivity传来的Note标识符
         UUID noteId = (UUID)getIntent().getSerializableExtra(EXTRA_NOTE_ID);
+        //通过标识符获取到对应的Note对象，从而操作其数据成员
         mNote = NoteLab.get(this).getNote(noteId);
-      //  mNote = new Note();
-
         if (mNote == null) {
             mNote = new Note();
         }
+        //若没有记录公司，表明该Note是无效的，退出时，不需要更新数据库中的数据
         if (mNote.getCompany() == null) {
             exitflag = false;
         } else {
@@ -64,12 +64,11 @@ public class NoteActivity extends Activity {
             exitflag = true;
         }
 
-
         mDateButton = (Button)findViewById(R.id.note_date);
+        //获取该NoteActivity对应Note对象的数据：招聘时间
         mDate = mNote.getDate();
         if (mDate!= null) {
             mDateButton.setText(mDate.toString());
-           // mDateButton.setText(new DateFormat().format("yyyy-MM-dd kk:mm", mDate.toString()));
         }
 
         mDateButton.setOnClickListener(new View.OnClickListener() {
@@ -79,13 +78,12 @@ public class NoteActivity extends Activity {
                 AlertDialog.Builder datedialog = new AlertDialog.Builder(NoteActivity.this);
                 datedialog.setView(dateView);
                 datedialog.setTitle("Date");
-               // datedialog.setPositiveButton("OK",null);
+                //点击“"OK",确认时间设置
                 datedialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mDate != null) {
                             mDateButton.setText(mDate.toString());
-                          //  mDateButton.setText(DateFormat.format("yyyy-MM-dd kk:mm", mDate.toString()));
                             mNote.setDate(mDate);
                             Log.d(TAG, "save date:"+mDate.getTime());
 
@@ -119,6 +117,7 @@ public class NoteActivity extends Activity {
                 });
                 datedialog.show();
 
+                //获取当前日期、时间生成Date对象
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
@@ -126,16 +125,12 @@ public class NoteActivity extends Activity {
                 int hour = calendar.get(Calendar.HOUR);
                 int minute = calendar.get(Calendar.MINUTE);
                 mDate = new GregorianCalendar(year, month, day, hour, minute).getTime();
-               // int hour = calendar.get(Calendar.HOUR);
-                //int minute = calendar.get(Calendar.MINUTE);
-                //Toast.makeText(NoteActivity.this, "year:"+year+", month:"+month+", day:"+day, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(NoteActivity.this, month, Toast.LENGTH_SHORT);
-                //Toast.makeText(NoteActivity.this, day, Toast.LENGTH_SHORT);
 
                 DatePicker datePicker = (DatePicker)dateView.findViewById(R.id.dialog_date_datePicker);
                 datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int month, int day) {
+                        //修改后的日期生成Date对象
                         mDate = new GregorianCalendar(year, month, day).getTime();
 
 
@@ -146,6 +141,7 @@ public class NoteActivity extends Activity {
                 timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                     @Override
                     public void onTimeChanged(TimePicker view, int hour, int minute) {
+                        //设置时间后，生成Date对象
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(mDate);
                         int year = calendar.get(Calendar.YEAR);
@@ -170,9 +166,8 @@ public class NoteActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence c, int i, int i2, int i3) {
-
+                //用户在界面中的公司处输入了数据
                 mNote.setCompany(c.toString());
-
             }
 
             @Override
@@ -191,6 +186,7 @@ public class NoteActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //用户在界面中的地点处输入了宣讲会地址
                 mNote.setPlace(s.toString());
             }
 
@@ -232,9 +228,7 @@ public class NoteActivity extends Activity {
                 }
             }
         });
-
-
-
+        //给左上角图标的左边加上一个返回的图标
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
