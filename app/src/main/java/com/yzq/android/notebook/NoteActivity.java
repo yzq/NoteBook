@@ -137,7 +137,6 @@ public class NoteActivity extends Activity {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int month, int day) {
                         mDate = new GregorianCalendar(year, month, day).getTime();
-                        //mDateButton.setText(mDate.toString());
 
 
                     }

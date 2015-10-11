@@ -11,11 +11,6 @@ import java.util.UUID;
  * Created by Administrator on 2015/4/20 0020.
  */
 public class Note {
-
-   // private static final String JSON_ID = "id";
-   // private static final String JSON_COMPANY = "company";
-
-
     private String mCompany;
     private UUID mId;
     private Date mDate;
@@ -25,16 +20,13 @@ public class Note {
     public Note() {
         mId = UUID.randomUUID();
         mAlarm = false;
-       // Calendar calendar = Calendar.getInstance();
-       // calendar.setTime(mDate);
-
-
     }
 
     public Note(String company) {
         mCompany = company;
         mAlarm = false;
     }
+    
     public Note(UUID id, String company, String place) {
         mId = id;
         mCompany = company;
