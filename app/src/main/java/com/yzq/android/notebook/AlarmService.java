@@ -48,7 +48,7 @@ public class AlarmService extends Service {
                     } else {
 
                         Intent i = new Intent(AlarmService.this, AlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(AlarmService.this, cursor.getInt(0), i, 0);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(AlarmService.this, cursor.getInt(cursor.getColumnIndex("key")), i, 0);
                         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         //alarmManager.set(AlarmManager.RTC_WAKEUP, new GregorianCalendar(year, month, day, hour, minute).getTimeInMillis()+(50000),
                         //pendingIntent);

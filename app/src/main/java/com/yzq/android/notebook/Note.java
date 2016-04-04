@@ -21,7 +21,7 @@ public class Note {
     private Date mDate;
     //宣讲会地点
     private String mPlace;
-    //宣讲会来临时的定时提醒标志
+    //宣讲会时间提醒标志
     private Boolean mAlarm;
 
     public Note() {

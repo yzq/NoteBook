@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +43,11 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         TextView dateTextView = (TextView)view.findViewById(R.id.date);
 
         companyTextView.setText(n.getCompany());
-        if (n.getDate() != null)
-            dateTextView.setText(n.getDate().toString());
+        if (n.getDate() != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+            String mDateFormat = simpleDateFormat.format(n.getDate());
+            dateTextView.setText(mDateFormat);
+        }
 
         return view;
     }

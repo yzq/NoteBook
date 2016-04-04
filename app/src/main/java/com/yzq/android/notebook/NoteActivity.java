@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -43,6 +47,8 @@ public class NoteActivity extends Activity {
     private Date mDate;
     private CheckBox mAlarmCheckBox;
     private AlarmManager alarmManager;
+    private NoteDatabaseOperator mOperator;
+    private NoteDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +74,9 @@ public class NoteActivity extends Activity {
         //获取该NoteActivity对应Note对象的数据：招聘时间
         mDate = mNote.getDate();
         if (mDate!= null) {
-            mDateButton.setText(mDate.toString());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+            String mDateFormat = simpleDateFormat.format(mDate);
+            mDateButton.setText(mDateFormat);
         }
 
         mDateButton.setOnClickListener(new View.OnClickListener() {
@@ -83,13 +91,15 @@ public class NoteActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mDate != null) {
-                            mDateButton.setText(mDate.toString());
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+                            String mDateFormat = simpleDateFormat.format(mDate);
+                            mDateButton.setText(mDateFormat);
                             mNote.setDate(mDate);
                             Log.d(TAG, "save date:"+mDate.getTime());
 
                         }
 
-                        if (mNote.isAlarm()) {
+                        /*if (mNote.isAlarm()) {
                             Calendar calendar = Calendar.getInstance();
                             int year = calendar.get(Calendar.YEAR);
                             int month = calendar.get(Calendar.MONTH);
@@ -99,30 +109,29 @@ public class NoteActivity extends Activity {
                             long currenttime = new GregorianCalendar(year, month, day, hour, minute).getTimeInMillis();
                             long alarmtime = mNote.getDate().getTime();
                             Log.d(TAG, "date:" + alarmtime);
+                            //int alarmid = Integer.parseInt(mNote.getCompany());
+                            //Log.d(TAG, "alarmid:" + alarmid);
                             if (alarmtime < currenttime) {
                                 Toast.makeText(NoteActivity.this, "alarmtime < currenttiime", Toast.LENGTH_SHORT).show();
-                                //isChecked = false;
                             } else {
                                 Intent intent = new Intent(NoteActivity.this, AlarmReceiver.class);
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteActivity.this, 0, intent, 0);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteActivity.this, alarmid, intent, 0);
                                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                //alarmManager.set(AlarmManager.RTC_WAKEUP, new GregorianCalendar(year, month, day, hour, minute).getTimeInMillis()+(50000),
-                                //pendingIntent);
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, alarmtime, pendingIntent);
                                 Log.d(TAG, "alarmstart");
 
                             }
-                        }
+                        }*/
                     }
                 });
                 datedialog.show();
 
-                //获取当前日期、时间生成Date对象
+                //获取当前日期和时间，以生成Date对象
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int hour = calendar.get(Calendar.HOUR);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
                 mDate = new GregorianCalendar(year, month, day, hour, minute).getTime();
 
@@ -203,29 +212,7 @@ public class NoteActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mNote.setAlarm(isChecked);
                 Log.d(TAG, "test:" + isChecked);
-                if (mNote.isAlarm()) {
-                    Calendar calendar = Calendar.getInstance();
-                    int year = calendar.get(Calendar.YEAR);
-                    int month = calendar.get(Calendar.MONTH);
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    int hour = calendar.get(Calendar.HOUR);
-                    int minute = calendar.get(Calendar.MINUTE);
-                    long currenttime = new GregorianCalendar(year, month, day, hour, minute).getTimeInMillis();
-                    long alarmtime = mNote.getDate().getTime();
-                    Log.d(TAG, "date:" + alarmtime);
-                    if (alarmtime < currenttime) {
-                        Toast.makeText(NoteActivity.this, "alarmtime < currenttiime", Toast.LENGTH_SHORT).show();
-                        //isChecked = false;
-                    } else {
-                        Intent intent = new Intent(NoteActivity.this, AlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteActivity.this, 0, intent, 0);
-                        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        //alarmManager.set(AlarmManager.RTC_WAKEUP, new GregorianCalendar(year, month, day, hour, minute).getTimeInMillis()+(50000),
-                        //pendingIntent);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmtime, pendingIntent);
-                        Log.d(TAG, "alarmstart");
-                    }
-                }
+
             }
         });
         //给左上角图标的左边加上一个返回的图标
@@ -269,13 +256,41 @@ public class NoteActivity extends Activity {
         super.onPause();
         if (mNote.getCompany() == null) {
             NoteLab.get(this).deleteNote(mNote);
+            return;
         }
-        else if (exitflag){
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        long time;
+
+        if (exitflag){
             NoteLab.get(this).updateNotes(mNote);
         } else {
 
             NoteLab.get(this).saveNotes(mNote);
             Log.d(TAG, "savenote");
         }
+
+        NoteLab noteLab = NoteLab.get(NoteActivity.this);
+        int key = noteLab.queryId(mNote);
+        Intent i = new Intent(NoteActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteActivity.this, key, i, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (mDate != null) {
+            time = mDate.getTime();
+        } else {
+            return;
+        }
+        if (mNote.isAlarm() && (time > new Date().getTime())) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+
+        }
+        else {
+            alarmManager.cancel(pendingIntent);
+        }
+
+
     }
 }

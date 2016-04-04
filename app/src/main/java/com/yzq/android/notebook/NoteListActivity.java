@@ -2,6 +2,9 @@ package com.yzq.android.notebook;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Build;
@@ -91,7 +94,16 @@ public class NoteListActivity extends Activity {
                             /*for (int i = adapter.getCount()-1; i >= 0; i--) {
                                 noteLab.deleteNote(adapter.getItem(i));
                             }*/
-                            noteLab.deleteNote(adapter.getItem(mposition));
+                            Note note = adapter.getItem(mposition);
+                            if (note.isAlarm()) {
+                                int key = noteLab.queryId(note);
+                                Intent i = new Intent(NoteListActivity.this, AlarmReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteListActivity.this, key, i, 0);
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                alarmManager.cancel(pendingIntent);
+                            }
+
+                            noteLab.deleteNote(note);
 
                             mode.finish();
                             adapter.notifyDataSetChanged();

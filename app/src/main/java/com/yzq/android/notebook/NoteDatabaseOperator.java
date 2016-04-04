@@ -54,7 +54,7 @@ public class NoteDatabaseOperator {
 
         values.put("place", n.getPlace());
         values.put("alarm", n.isAlarm());
-        db.update("Note", values, "id = ?", new String[]{ mid });
+        db.update("Note", values, "id = ?", new String[]{mid});
         //db.execSQL("update Note set company = ? where id =?", new String[] { n.getCompany(), mid });
     }
 
@@ -89,7 +89,7 @@ public class NoteDatabaseOperator {
                 }
 
             } while (cursor.moveToNext());
-
+            //db.rawQuery(“select * from Note”, null);
         }
         cursor.close();
 
@@ -99,7 +99,21 @@ public class NoteDatabaseOperator {
     public void deleteNote(Note n) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String mid = n.getId().toString();
-        db.delete("Note", "id = ?", new String[] {mid});
+        db.delete("Note", "id = ?", new String[]{mid});
         //db.execSQL("delete from Note where id =?", new String[] { mid });
+
+    }
+
+    public int queryId(Note n) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String mid = n.getId().toString();
+        Cursor cursor = db.query("Note", null, "id = ?", new String[]{mid}, null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(cursor.getColumnIndex("key"));
+        }
+        else {
+            return -1;
+        }
+
     }
 }

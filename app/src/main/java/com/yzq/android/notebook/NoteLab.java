@@ -72,4 +72,8 @@ public class NoteLab {
         mOperator.updateNotes(n);
 
     }
+
+    public int queryId(Note n) {
+        return mOperator.queryId(n);
+    }
 }
