@@ -1,11 +1,14 @@
 package com.yzq.android.notebook;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +35,7 @@ public class NoteListActivity extends Activity {
     private ArrayList<Note> mNotes;
     public static final String EXTRA_NOTE_ID = "note.id";
     public static final String TAG = "NoteListActivity";
+    public static final String ACTIONBAR_COLOR = "#33cc77";
     ListView listView;
     NoteAdapter adapter;
 
@@ -40,6 +44,9 @@ public class NoteListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notelist);
+
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(ACTIONBAR_COLOR)));
 
         mNotes = NoteLab.get(this).getNotes();
 

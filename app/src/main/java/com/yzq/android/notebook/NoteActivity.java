@@ -1,6 +1,7 @@
 package com.yzq.android.notebook;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -10,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,6 +46,7 @@ public class NoteActivity extends Activity {
     public static final String EXTRA_NOTE_ID = "com.yzq.android.notebook.note_id";
     private boolean exitflag;
     public static final String TAG = "NoteActivity";
+    public static final String ACTIONBAR_COLOR = "#33cc77";
     private Button mDateButton;
     private Date mDate;
     private CheckBox mAlarmCheckBox;
@@ -54,6 +58,9 @@ public class NoteActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(ACTIONBAR_COLOR)));
 
         //获取NoteListActivity传来的Note标识符
         UUID noteId = (UUID)getIntent().getSerializableExtra(EXTRA_NOTE_ID);
