@@ -92,9 +92,9 @@ public class NoteActivity extends Activity {
                 View dateView = getLayoutInflater().inflate(R.layout.dialog_date, null);
                 AlertDialog.Builder datedialog = new AlertDialog.Builder(NoteActivity.this);
                 datedialog.setView(dateView);
-                datedialog.setTitle("Date");
-                //点击“"OK",确认时间设置
-                datedialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                datedialog.setTitle(R.string.dialog_date_title);
+                //点击“确定“,确认时间设置
+                datedialog.setPositiveButton(R.string.dialog_date_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mDate != null) {
@@ -106,29 +106,14 @@ public class NoteActivity extends Activity {
 
                         }
 
-                        /*if (mNote.isAlarm()) {
-                            Calendar calendar = Calendar.getInstance();
-                            int year = calendar.get(Calendar.YEAR);
-                            int month = calendar.get(Calendar.MONTH);
-                            int day = calendar.get(Calendar.DAY_OF_MONTH);
-                            int hour = calendar.get(Calendar.HOUR);
-                            int minute = calendar.get(Calendar.MINUTE);
-                            long currenttime = new GregorianCalendar(year, month, day, hour, minute).getTimeInMillis();
-                            long alarmtime = mNote.getDate().getTime();
-                            Log.d(TAG, "date:" + alarmtime);
-                            //int alarmid = Integer.parseInt(mNote.getCompany());
-                            //Log.d(TAG, "alarmid:" + alarmid);
-                            if (alarmtime < currenttime) {
-                                Toast.makeText(NoteActivity.this, "alarmtime < currenttiime", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Intent intent = new Intent(NoteActivity.this, AlarmReceiver.class);
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteActivity.this, alarmid, intent, 0);
-                                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmtime, pendingIntent);
-                                Log.d(TAG, "alarmstart");
+                    }
+                });
 
-                            }
-                        }*/
+                //点击“取消”
+                datedialog.setNeutralButton(R.string.dialog_date_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
                 });
                 datedialog.show();

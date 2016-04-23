@@ -12,5 +12,8 @@
     <string name="time_label">时间</string>
     <string name="place_label">地点</string>
     <string name="note_alarm_label">提醒</string>
+    <string name="dialog_date_title">时间</string>
+    <string name="dialog_date_confirm">确定</string>
+    <string name="dialog_date_cancel">取消</string>
 
 </resources>
