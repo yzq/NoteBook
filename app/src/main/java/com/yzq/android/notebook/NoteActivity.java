@@ -46,7 +46,7 @@ public class NoteActivity extends Activity {
     public static final String EXTRA_NOTE_ID = "com.yzq.android.notebook.note_id";
     private boolean exitflag;
     public static final String TAG = "NoteActivity";
-    public static final String ACTIONBAR_COLOR = "#33cc77";
+    public static final String ACTIONBAR_COLOR = "#0099ff";
     private Button mDateButton;
     private Date mDate;
     private CheckBox mAlarmCheckBox;

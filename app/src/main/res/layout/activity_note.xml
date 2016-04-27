@@ -22,20 +22,7 @@
         android:textSize="20sp"
         android:hint="@string/company_hint"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/time_label"
-        android:textSize="20sp"
-        style="?android:listSeparatorTextViewStyle"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/note_date"
-        android:textSize="20sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,6 +37,23 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/time_label"
+        android:textSize="20sp"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/note_date"
+        android:textSize="20sp"
+        android:gravity="center_vertical|"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <CheckBox
         android:id="@+id/note_alarm"

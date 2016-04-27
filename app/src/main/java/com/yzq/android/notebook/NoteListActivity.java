@@ -36,7 +36,7 @@ public class NoteListActivity extends Activity {
     private ArrayList<Note> mNotes;
     public static final String EXTRA_NOTE_ID = "note.id";
     public static final String TAG = "NoteListActivity";
-    public static final String ACTIONBAR_COLOR = "#33cc77";
+    public static final String ACTIONBAR_COLOR = "#0099ff";
     ListView listView;
     NoteAdapter adapter;
 
